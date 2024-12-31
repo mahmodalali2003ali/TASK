@@ -28,7 +28,7 @@ class EditTaskView extends StatelessWidget {
         backgroundColor: AppColors.kScaffoldColor,
         title: Center(
           child: Text(
-            "Edit Task",
+            "Edit Task ${nameController.text}",
             style: TextStyle(
               color: AppColors.kWhiteColor,
               fontSize: screenWidth * 0.05,

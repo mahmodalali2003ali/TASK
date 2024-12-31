@@ -12,12 +12,10 @@ class TodoScreenView extends StatefulWidget {
   @override
   _TodoScreenViewState createState() => _TodoScreenViewState();
 }
-
 class _TodoScreenViewState extends State<TodoScreenView> {
-  // Task list for demonstration
   List<TaskModel> tasks = [
     TaskModel(id: '1', name: 'Going to Syria', description: 'A task to travel to Syria'),
-    // You can add more tasks here for testing
+    // Add more tasks as needed
   ];
 
   // Method to delete a task
@@ -41,6 +39,14 @@ class _TodoScreenViewState extends State<TodoScreenView> {
       if (index != -1) {
         tasks[index] = updatedTask;
       }
+    });
+  }
+
+  // Method to toggle the completion state of a task
+  void toggleTaskCompletion(String taskId) {
+    setState(() {
+      final task = tasks.firstWhere((task) => task.id == taskId);
+      task.completed = !task.completed;
     });
   }
 
@@ -185,10 +191,13 @@ class _TodoScreenViewState extends State<TodoScreenView> {
                           backgroundColor: AppColors.kBoxColor,
                           radius: screenWidth * 0.04,
                           child: Checkbox(
+                            side: BorderSide(color: AppColors.kBoxColor),
                             checkColor: AppColors.kWhiteColor,
                             activeColor: AppColors.kBoxColor,
-                            value: false,
-                            onChanged: (_) {},
+                            value: tasks[index].completed,
+                            onChanged: (_) {
+                              toggleTaskCompletion(tasks[index].id);
+                            },
                           ),
                         ),
                         title: Row(
@@ -196,11 +205,12 @@ class _TodoScreenViewState extends State<TodoScreenView> {
                           children: [
                             Text(
                               tasks[index].name,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 color: AppColors.kBlackColor,
-                                fontSize: screenWidth * 0.03,
+                                fontSize: screenWidth * 0.04,
+                                decoration: tasks[index].completed
+                                    ? TextDecoration.lineThrough
+                                    : TextDecoration.none,
                               ),
                             ),
                             Row(
@@ -217,8 +227,8 @@ class _TodoScreenViewState extends State<TodoScreenView> {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
                                         builder: (context) => EditTaskView(
-                                          task: tasks[index], // Pass task to edit view
-                                          onEditTask: editTask, // Pass the edit method
+                                          task: tasks[index],
+                                          onEditTask: editTask,
                                         ),
                                       ),
                                     );
